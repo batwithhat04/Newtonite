@@ -4,7 +4,7 @@
 
 **A real-time collaborative work item management system built for teams under pressure.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-newtonite.plum.vercel.app-blue?style=for-the-badge&logo=vercel)](https://newtonite.plum.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-newtonite--plum.vercel.app-blue?style=for-the-badge&logo=vercel)](https://newtonite-plum.vercel.app/)
 [![Backend](https://img.shields.io/badge/Backend-newtonite.onrender.com-green?style=for-the-badge&logo=render)](https://newtonite.onrender.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
