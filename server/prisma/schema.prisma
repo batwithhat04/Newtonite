@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  teamId    String?
+  team      Team?      @relation(fields: [teamId], references: [id])
+  workItems WorkItem[] @relation("assignedTo")
+  events    WorkItemEvent[]
+}
+
+model Team {
+  id        String     @id @default(uuid())
+  name      String
+  users     User[]
+}
+
+model WorkItem {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  status      String   @default("OPEN") // OPEN, IN_PROGRESS, REVIEW, RESOLVED
+  priority    String   @default("NORMAL") // LOW, NORMAL, URGENT
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  assignedToId String?
+  assignedTo   User?    @relation("assignedTo", fields: [assignedToId], references: [id])
+  
+  events      WorkItemEvent[]
+}
+
+model WorkItemEvent {
+  id         String   @id @default(uuid())
+  workItemId String
+  workItem   WorkItem @relation(fields: [workItemId], references: [id])
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  type       String   // CREATED, STATUS_CHANGED, ASSIGNED, COMMENTED
+  payload    String   // JSON string containing changes or comment
+  createdAt  DateTime @default(now())
+}
