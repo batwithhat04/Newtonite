@@ -11,27 +11,24 @@ export default function App() {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    // Basic user simulation setup
-    api.get('/users').then(res => {
-      setUsers(res.data);
-      if (res.data.length > 0 && !userId) {
-        setUserId(res.data[0].id);
-        localStorage.setItem('userId', res.data[0].id);
-      }
-    }).catch(async (e) => {
-      // Seed if not found (simulation helper)
-      if (e.response?.status === 401 || e.message === 'Network Error') {
-        try {
+    const bootstrap = async () => {
+      try {
+        let res = await api.get('/users');
+        // If DB is empty, seed it first
+        if (res.data.length === 0) {
           await api.post('/seed');
-          const res = await api.get('/users');
-          setUsers(res.data);
-          if (res.data.length > 0) {
-            setUserId(res.data[0].id);
-            localStorage.setItem('userId', res.data[0].id);
-          }
-        } catch (seedErr) {}
+          res = await api.get('/users');
+        }
+        setUsers(res.data);
+        if (res.data.length > 0 && !userId) {
+          setUserId(res.data[0].id);
+          localStorage.setItem('userId', res.data[0].id);
+        }
+      } catch (e) {
+        console.error('Failed to bootstrap users', e);
       }
-    });
+    };
+    bootstrap();
   }, []);
 
   const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
