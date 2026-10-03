@@ -1,9 +1,10 @@
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../api';
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { AlertCircle, Clock, CheckCircle, Search, User, MessageSquare, History, AlertTriangle } from 'lucide-react';
+import { AlertCircle, Clock, CheckCircle, Search, MessageSquare, AlertTriangle } from 'lucide-react';
 
 const priorityColors = {
   LOW: 'bg-slate-700 text-slate-300',
@@ -11,7 +12,7 @@ const priorityColors = {
   URGENT: 'bg-red-900/50 text-red-300'
 };
 
-const statusIcons = {
+const statusIcons: Record<string, React.ReactNode> = {
   OPEN: <AlertCircle size={20} className="text-yellow-400" />,
   IN_PROGRESS: <Clock size={20} className="text-blue-400" />,
   REVIEW: <Search size={20} className="text-purple-400" />,
@@ -78,6 +79,9 @@ export default function WorkItemDetails() {
           <div className="flex justify-between items-start mb-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
+                <div className="bg-[#0f172a] p-1.5 rounded-lg border border-[#334155]">
+                  {statusIcons[item.status as keyof typeof statusIcons]}
+                </div>
                 <span className="text-sm font-mono text-slate-500 bg-[#0f172a] px-2 py-1 rounded border border-[#334155]">
                   #{item.id.slice(0, 8)}
                 </span>
